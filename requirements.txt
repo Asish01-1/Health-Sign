@@ -1,0 +1,58 @@
+# ========= Core =========
+langgraph
+langchain
+langchain-core
+langchain-community
+
+# ========= LLM Providers =========
+langchain-google-genai
+langchain-groq
+langchain-mistralai
+
+# ========= Environment =========
+python-dotenv
+
+# ========= Backend =========
+fastapi
+uvicorn
+pydantic
+python-multipart
+
+# ========= HTTP =========
+requests
+httpx
+
+# ========= Google APIs =========
+google-api-python-client
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+
+# ========= Database =========
+sqlalchemy
+aiosqlite
+
+# ========= Vector Database (Future RAG) =========
+faiss-cpu
+
+# ========= Embeddings =========
+sentence-transformers
+langchain-huggingface
+
+# ========= Document Loading (Future RAG) =========
+pypdf
+unstructured
+
+# ========= Vision =========
+pillow
+
+# ========= Audio =========
+openai-whisper
+
+# ========= Utilities =========
+pandas
+numpy
+tqdm
+
+# ========= Optional =========
+python-dateutil
