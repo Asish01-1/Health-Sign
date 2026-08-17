@@ -80,10 +80,17 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+        .sub-dialogue{
+            color: yellow;
+        }
         .stApp {
             background: yellowgreen;
         }
+        
 
+        .st-emotion-cache-lsgwmo p{
+            color:black !important;
+        }
         /* Hero header */
         .hfo-hero {
             text-align: center;
@@ -95,7 +102,7 @@ st.markdown(
             color: #1b5e20;
         }
         .hfo-hero p {
-            color: #4b5f4d;
+            color: white;
             font-size: 0.98rem;
             margin-top: 0;
         }
@@ -133,7 +140,9 @@ st.markdown(
         }
 
         section[data-testid="stSidebar"] {
-            background: #f1f8f0;
+            background: red;
+            text-color: white;
+            texxt-weight: 800;
         }
     </style>
     """,
@@ -213,7 +222,7 @@ st.markdown(
     """
     <div class="hfo-hero">
         <h1>🥗 Healthy Food Organizer</h1>
-        <p>From kids to seniors, athletes to gym-goers — healthy eating made for you.</p>
+        <p id="sub-dialogue">From kids to seniors, athletes to gym-goers — healthy eating made for you.</p>
     </div>
     """,
     unsafe_allow_html=True,
