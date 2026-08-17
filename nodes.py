@@ -14,9 +14,6 @@ from tools import (
 VALID_INTENTS = {"recipe", "nutrition", "healthy", "meal_plan"}
 
 
-# ==========================================================
-# Intent Router
-# ==========================================================
 
 def intent_router_node(state: NutritionState):
 
@@ -50,11 +47,7 @@ def intent_router_node(state: NutritionState):
     response = llm.invoke([HumanMessage(content=prompt)])
 
     intent = response.content.strip().lower()
-    # Normalize things like "meal plan" -> "meal_plan"
     intent = intent.replace(" ", "_").replace("-", "_")
-
-    # Fall back to "recipe" if the model returns something unexpected,
-    # instead of crashing the graph on an unmapped edge.
     if intent not in VALID_INTENTS:
         intent = "recipe"
 
@@ -78,9 +71,6 @@ def post_nutrition_router(state: NutritionState):
     return "end"
 
 
-# ==========================================================
-# Recipe Node
-# ==========================================================
 
 def recipe_node(state: NutritionState):
 
@@ -97,15 +87,9 @@ def recipe_node(state: NutritionState):
     return state
 
 
-# ==========================================================
-# Nutrition Node
-# ==========================================================
-
 def nutrition_node(state: NutritionState):
 
-    # If a recipe was already generated (recipe/healthy intents), analyze
-    # that. Otherwise (plain "nutrition" intent) analyze the user's query
-    # directly instead of an empty/None recipe.
+   
     subject = state.get("recipe") or state["user_query"]
 
     nutrition = analyze_nutrition.invoke({"recipe": subject})
@@ -116,9 +100,6 @@ def nutrition_node(state: NutritionState):
     return state
 
 
-# ==========================================================
-# Healthy Node
-# ==========================================================
 
 def healthy_node(state: NutritionState):
 
@@ -137,9 +118,6 @@ def healthy_node(state: NutritionState):
     return state
 
 
-# ==========================================================
-# Meal Planner Node
-# ==========================================================
 
 def meal_planner_node(state: NutritionState):
 
@@ -157,9 +135,6 @@ def meal_planner_node(state: NutritionState):
     return state
 
 
-# ==========================================================
-# Meal Nutrition Node
-# ==========================================================
 
 def meal_nutrition_node(state: NutritionState):
 
@@ -170,13 +145,9 @@ def meal_nutrition_node(state: NutritionState):
     return state
 
 
-# ==========================================================
-# Meal Evaluator Node
-# ==========================================================
 
 def meal_evaluator_node(state: NutritionState):
 
-    # Structured evaluation drives the retry decision.
     eval_prompt = f"""
     Evaluate this meal plan against the user's goal.
 
@@ -206,10 +177,6 @@ def meal_evaluator_node(state: NutritionState):
 
     return state
 
-
-# ==========================================================
-# Meal Router
-# ==========================================================
 
 def meal_plan_router(state: NutritionState):
 
