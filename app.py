@@ -1,72 +1,8 @@
-# from graph import app
-
-# print("=" * 60)
-# print("  Healthy Food Organizer")
-# print("  Ask for a recipe, nutrition facts, a healthier swap,")
-# print("  or a full 7-day meal plan. Type 'exit' to quit.")
-# print("=" * 60)
-
-# # Optional: ask once who this session is for, so every answer
-# # (kids, seniors, athletes, gym-goers, general adults) is tailored.
-# print("\nWho is this for? (e.g. 'child', 'senior', 'athlete', "
-#       "'gym / muscle gain', or just press Enter for general adult)")
-# user_profile = input("Profile: ").strip() or None
-
-# while True:
-
-#     user_query = input("\nYou: ").strip()
-
-#     if user_query.lower() in {"exit", "quit"}:
-#         print("Goodbye — stay healthy!")
-#         break
-
-#     if not user_query:
-#         continue
-
-#     initial_state = {
-#         "user_query": user_query,
-#         "user_profile": user_profile,
-#         "intent": None,
-#         "recipe": None,
-#         "nutrition": None,
-#         "healthy_recipe": None,
-#         "meal_plan": None,
-#         "meal_plan_score": None,
-#         "is_goal_achieved": None,
-#         "improvement_suggestions": None,
-#         "retry_count": 0,
-#         "max_retry": 3,
-#         "final_response": None,
-#         "error": None,
-#     }
-
-#     try:
-#         result = app.invoke(initial_state)
-#     except Exception as e:
-#         print(f"\nAssistant: Something went wrong: {e}")
-#         continue
-
-#     print("\nAssistant:\n")
-#     print(result.get("final_response") or "Sorry, I couldn't generate a response.")
-
-"""
-Healthy Food Organizer — Streamlit UI
---------------------------------------
-Drives the existing LangGraph pipeline (graph.py -> app) with a clean,
-chat-style interface. The user picks a profile ONCE at the start of the
-session; every message after that is answered using that same profile,
-without asking again.
-
-Run with:
-    streamlit run app.py
-"""
-
+# Simply use streamlit run app.py
 import streamlit as st
 from graph import app  # your existing compiled LangGraph pipeline
 
-# --------------------------------------------------------------------------
-# Page config
-# --------------------------------------------------------------------------
+
 st.set_page_config(
     page_title="Healthy Food Organizer",
     page_icon="🥗",
@@ -74,9 +10,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --------------------------------------------------------------------------
-# Styling
-# --------------------------------------------------------------------------
 st.markdown(
     """
     <style>
@@ -149,9 +82,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --------------------------------------------------------------------------
-# Profile options
-# --------------------------------------------------------------------------
 PROFILES = {
     "🧒 Child": "child",
     "🧑 General Adult": None,
@@ -168,15 +98,12 @@ SUGGESTIONS = [
     "I want to lose 10kg, help me plan meals",
 ]
 
-# --------------------------------------------------------------------------
-# Session state
-# --------------------------------------------------------------------------
 if "profile_locked" not in st.session_state:
     st.session_state.profile_locked = False
 if "user_profile" not in st.session_state:
     st.session_state.user_profile = None
 if "messages" not in st.session_state:
-    st.session_state.messages = []  # list of {"role": ..., "content": ...}
+    st.session_state.messages = []  
 
 
 def lock_profile(label: str, custom_text: str = ""):
@@ -193,9 +120,6 @@ def reset_session():
     st.session_state.messages = []
 
 
-# --------------------------------------------------------------------------
-# Sidebar
-# --------------------------------------------------------------------------
 with st.sidebar:
     st.markdown("### 🥗 Healthy Food Organizer")
     st.caption("Recipes, nutrition facts, healthier swaps, and full meal plans — tailored to you.")
@@ -215,9 +139,7 @@ with st.sidebar:
     st.divider()
     st.caption("Type 'exit' isn't needed here — just close the tab, or hit **Start over** anytime.")
 
-# --------------------------------------------------------------------------
-# Hero header
-# --------------------------------------------------------------------------
+
 st.markdown(
     """
     <div class="hfo-hero">
@@ -228,9 +150,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --------------------------------------------------------------------------
-# Step 1: Ask for profile ONCE
-# --------------------------------------------------------------------------
 if not st.session_state.profile_locked:
     st.markdown("#### Who is this for?")
     cols = st.columns(3)
@@ -254,18 +173,13 @@ if not st.session_state.profile_locked:
         lock_profile(chosen_label, custom_text)
         st.rerun()
 
-    st.stop()  # don't show chat until profile is locked in
+    st.stop()  
 
-# --------------------------------------------------------------------------
-# Step 2: Chat interface (profile already locked)
-# --------------------------------------------------------------------------
 
-# Replay history
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# Quick-start suggestion chips (only when conversation hasn't started)
 if not st.session_state.messages:
     st.markdown("##### Try asking:")
     chip_cols = st.columns(2)
@@ -317,12 +231,10 @@ def handle_user_message(text: str):
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
 
-# Handle a clicked suggestion chip
 if clicked_suggestion:
     handle_user_message(clicked_suggestion)
     st.rerun()
 
-# Chat input box
 user_input = st.chat_input("Ask for a recipe, nutrition facts, a healthier swap, or a meal plan...")
 if user_input:
     handle_user_message(user_input)
