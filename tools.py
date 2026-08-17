@@ -17,10 +17,6 @@ def _profile_line(user_profile: str | None) -> str:
     )
 
 
-# ==========================================================
-# Recipe Generator
-# ==========================================================
-
 @tool
 def generate_recipe(user_query: str, user_profile: str | None = None) -> str:
     """
@@ -58,11 +54,6 @@ def generate_recipe(user_query: str, user_profile: str | None = None) -> str:
     response = llm.invoke(prompt)
     return response.content
 
-
-# ==========================================================
-# Nutrition Analyzer
-# ==========================================================
-
 @tool
 def analyze_nutrition(recipe: str) -> str:
     """
@@ -93,9 +84,6 @@ def analyze_nutrition(recipe: str) -> str:
     return response.content
 
 
-# ==========================================================
-# Healthy Alternative
-# ==========================================================
 
 @tool
 def healthy_alternative(
@@ -134,10 +122,6 @@ def healthy_alternative(
     response = llm.invoke(prompt)
     return response.content
 
-
-# ==========================================================
-# Meal Planner
-# ==========================================================
 
 @tool
 def meal_planner(
@@ -180,10 +164,6 @@ def meal_planner(
     response = llm.invoke(prompt)
     return response.content
 
-
-# ==========================================================
-# Meal Evaluator
-# ==========================================================
 
 @tool
 def evaluate_meal_plan(
