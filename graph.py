@@ -26,13 +26,8 @@ graph.add_node("meal_plan", meal_planner_node)
 graph.add_node("meal_nutrition", meal_nutrition_node)
 graph.add_node("meal_evaluator", meal_evaluator_node)
 
-# --- Entry ---
 graph.add_edge(START, "intent_router")
 
-# --- Route by intent ---
-# "recipe" and "healthy" both need a recipe first; "nutrition" analyzes
-# the query directly (nutrition_node falls back to user_query when there's
-# no recipe yet); "meal_plan" goes down its own branch.
 graph.add_conditional_edges(
     "intent_router",
     route_intent,
@@ -46,9 +41,6 @@ graph.add_conditional_edges(
 
 graph.add_edge("recipe", "nutrition")
 
-# After nutrition analysis: only go on to "healthy alternative" if that's
-# what was actually asked for. Otherwise stop here — a plain recipe or
-# nutrition request shouldn't be forced through the healthy-swap step.
 graph.add_conditional_edges(
     "nutrition",
     post_nutrition_router,
@@ -60,7 +52,6 @@ graph.add_conditional_edges(
 
 graph.add_edge("healthy", END)
 
-# --- Meal plan branch, with a working retry loop ---
 graph.add_edge("meal_plan", "meal_nutrition")
 graph.add_edge("meal_nutrition", "meal_evaluator")
 
